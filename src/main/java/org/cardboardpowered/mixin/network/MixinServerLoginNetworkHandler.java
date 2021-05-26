@@ -251,7 +251,15 @@ public class MixinServerLoginNetworkHandler implements IMixinServerLoginNetworkH
         return cardboard_player;
     }
 
-    @Inject(at = @At("HEAD"), method="onHello", cancellable = true)
+    @Inject(
+            method = "onHello",
+            at = @At(
+                value = "FIELD",
+                target = "Lorg/apache/commons/lang3/Validate;validState(ZLjava/lang/String;[Ljava/lang/Object;)V",
+                shift = At.Shift.BEFORE
+            ),
+            cancellable = true
+    )
     public void spigotHello1(LoginHelloC2SPacket p, CallbackInfo ci) {
         if (state != State.HELLO) {
             ((ServerLoginNetworkHandler)(Object)this).acceptPlayer();
